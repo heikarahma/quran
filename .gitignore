@@ -1,0 +1,23 @@
+# Flutter and Dart generated files
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+coverage/
+
+# Android machine-specific files and signing credentials
+.gradle/
+.kotlin/
+/android/local.properties
+/android/**/GeneratedPluginRegistrant.java
+key.properties
+*.jks
+*.keystore
+
+# Local environment and generated artifacts
+.env
+.env.*
+!.env.example
+/output/
+/tmp/

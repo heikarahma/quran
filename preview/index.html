@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Al-Qur'an Al-Karim - Luxury Dark Gold Mobile App (390px)</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Remix Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 390px Mobile Frame -->
+  <div class="mobile-device">
+    
+    <!-- iOS Status Bar & Dynamic Island -->
+    <div class="status-bar">
+      <span>09:41</span>
+      <div class="notch"></div>
+      <div style="display: flex; gap: 4px; align-items: center;">
+        <i class="ri-signal-tower-fill" style="font-size: 11px;"></i>
+        <i class="ri-wifi-fill" style="font-size: 11px;"></i>
+        <i class="ri-battery-fill" style="font-size: 14px;"></i>
+      </div>
+    </div>
+
+    <!-- App Header -->
+    <header class="app-header">
+      <div class="header-brand">
+        <button id="headerBackBtn" class="icon-btn" style="display: none;" title="Kembali">
+          <i class="ri-arrow-left-line"></i>
+        </button>
+        <div class="header-icon">
+          <i class="ri-book-open-fill"></i>
+        </div>
+        <div class="header-titles">
+          <h1>Al-Qur'an Al-Karim</h1>
+          <p>Baca & Tadabbur Al-Qur'an</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="QuranApp.openModal('settingsModal')" title="Pengaturan Tampilan">
+          <i class="ri-equalizer-line"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="app-content" id="appContent">
+      
+      <!-- Search Box -->
+      <div class="search-container">
+        <div class="search-box">
+          <i class="ri-search-line" style="color: var(--gold-primary); font-size: 16px;"></i>
+          <input type="text" id="surahSearchInput" placeholder="Cari nama surah, nomor, atau arti...">
+        </div>
+      </div>
+
+      <!-- Last Read Banner -->
+      <div class="last-read-card" onclick="QuranApp.openSurahVerseView(18)">
+        <div class="last-read-watermark">القرآن</div>
+        <div class="last-read-badge">
+          <i class="ri-book-read-fill"></i> Terakhir Dibaca
+        </div>
+        <h3 id="lastReadTitle">Surah Al-Kahf</h3>
+        <p id="lastReadAyah">Ayat No. 10</p>
+        <button class="btn-resume">
+          Lanjutkan Membaca <i class="ri-arrow-right-line"></i>
+        </button>
+      </div>
+
+      <!-- Tabs Navigation -->
+      <nav class="tabs-nav">
+        <div class="tab-item active" onclick="QuranApp.renderHomeView()">Surah</div>
+        <div class="tab-item" onclick="QuranApp.openMushafPageView(1)">Mushaf (Hal. 1)</div>
+        <div class="tab-item" onclick="QuranApp.openMushafPageView(293)">Surah Al-Kahf</div>
+        <div class="tab-item" onclick="QuranApp.openMushafPageView(582)">Juz 30 (Hal. 582)</div>
+      </nav>
+
+      <!-- Surah List Container -->
+      <div class="surah-list" id="surahListContainer">
+        <!-- Injected via JavaScript -->
+      </div>
+
+    </main>
+
+    <!-- Floating Sticky Mini Audio Player -->
+    <div class="mini-audio-player" id="miniPlayer" style="display: none;">
+      <div class="mini-player-avatar" onclick="QuranApp.openModal('qariModal')" title="Ganti Qari">
+        <i class="ri-user-voice-fill"></i>
+      </div>
+      <div class="mini-player-info">
+        <div class="mini-player-title" id="miniPlayerTitle">Surah #1 : Ayat 1</div>
+        <div class="mini-player-qari" id="miniPlayerQari">Mishary Rashid Alafasy</div>
+      </div>
+      <div class="mini-player-controls">
+        <button onclick="QuranApp.prevAudio()"><i class="ri-skip-back-fill"></i></button>
+        <button class="play-btn" id="miniPlayBtn" onclick="QuranApp.togglePlayPause()"><i class="ri-pause-circle-fill"></i></button>
+        <button onclick="QuranApp.nextAudio()"><i class="ri-skip-forward-fill"></i></button>
+        <button onclick="QuranApp.stopAudio()"><i class="ri-close-line" style="font-size: 16px; color: var(--text-dim);"></i></button>
+      </div>
+    </div>
+
+    <!-- Reading Mode Modal -->
+    <div class="modal-overlay" id="readingModeModal" onclick="QuranApp.closeAllModals()">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title" id="modeModalTitle">Pilih Mode Membaca</div>
+        
+        <div class="modal-action-row" id="btnModeVerse">
+          <div class="action-icon-circle" style="background: rgba(212, 175, 55, 0.15); color: var(--gold-primary);">
+            <i class="ri-list-check"></i>
+          </div>
+          <div>
+            <div style="font-weight: 700; color: #fff;">Mode Ayat Per Ayat</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Teks Arab, transliterasi, terjemahan & audio</div>
+          </div>
+        </div>
+
+        <div class="modal-action-row" id="btnModePage">
+          <div class="action-icon-circle" style="background: rgba(212, 175, 55, 0.15); color: var(--gold-primary);">
+            <i class="ri-book-open-line"></i>
+          </div>
+          <div>
+            <div style="font-weight: 700; color: #fff;">Mode Mushaf Madani (15 Baris)</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Halaman penuh berbingkai ornamen emas & toska</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ayah Context Action Sheet -->
+    <div class="modal-overlay" id="ayahActionModal" onclick="QuranApp.closeAllModals()">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title" id="ayahActionTitle">QS. Al-Fatihah: 1</div>
+        <div id="ayahActionArabic" style="font-family: var(--font-arabic); font-size: 18px; color: var(--gold-light); direction: rtl; margin-bottom: 14px; background: var(--surface-dark); padding: 10px; border-radius: 10px;"></div>
+
+        <div class="modal-action-row" onclick="QuranApp.playAyahAudio(QuranApp.selectedAyahForAction.surah.number, QuranApp.selectedAyahForAction.ayah.ayah); QuranApp.closeAllModals();">
+          <div class="action-icon-circle" style="background: rgba(212, 175, 55, 0.15); color: var(--gold-primary);"><i class="ri-play-fill"></i></div>
+          <div><div style="font-weight: 600; color: #fff;">Putar Audio Murottal</div></div>
+        </div>
+
+        <div class="modal-action-row" onclick="QuranApp.openTafsirModal(QuranApp.selectedAyahForAction.surah.number, QuranApp.selectedAyahForAction.ayah.ayah)">
+          <div class="action-icon-circle" style="background: rgba(59, 130, 246, 0.15); color: var(--sapphire);"><i class="ri-book-read-line"></i></div>
+          <div><div style="font-weight: 600; color: #fff;">Baca Tafsir Kemenag</div></div>
+        </div>
+
+        <div class="modal-action-row" onclick="QuranApp.toggleBookmark(QuranApp.selectedAyahForAction.surah.number, QuranApp.selectedAyahForAction.ayah.ayah)">
+          <div class="action-icon-circle" style="background: rgba(16, 185, 129, 0.15); color: var(--emerald);"><i class="ri-bookmark-line"></i></div>
+          <div><div style="font-weight: 600; color: #fff;">Simpan ke Bookmark (Firebase Sync)</div></div>
+        </div>
+
+        <div class="modal-action-row" onclick="QuranApp.saveAsLastRead()">
+          <div class="action-icon-circle" style="background: rgba(229, 195, 120, 0.15); color: var(--gold-accent);"><i class="ri-history-line"></i></div>
+          <div><div style="font-weight: 600; color: #fff;">Tandai Terakhir Dibaca</div></div>
+        </div>
+
+        <div class="modal-action-row" onclick="QuranApp.copyAyahText()">
+          <div class="action-icon-circle" style="background: rgba(255, 255, 255, 0.1); color: #fff;"><i class="ri-file-copy-line"></i></div>
+          <div><div style="font-weight: 600; color: #fff;">Salin Teks Ayat</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tafsir Modal -->
+    <div class="modal-overlay" id="tafsirModal" onclick="QuranApp.closeAllModals()">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title" id="tafsirModalTitle">Tafsir Kemenag RI</div>
+        <div style="background: var(--surface-dark); padding: 14px; border-radius: 14px; border: 1px solid var(--border-dark);">
+          <div style="font-size: 13px; font-weight: 700; color: var(--gold-light); margin-bottom: 6px;">Tafsir Ringkas</div>
+          <p id="tafsirContentText" style="font-size: 13.5px; line-height: 1.6; color: var(--text-white);"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Qari Selector Modal -->
+    <div class="modal-overlay" id="qariModal" onclick="QuranApp.closeAllModals()">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title">Pilih Qari Murottal</div>
+        <div class="modal-action-row" onclick="QuranApp.currentQari = QuranApp.qaris[0]; QuranApp.showToast('Qari diubah ke Mishary Alafasy'); QuranApp.closeAllModals();">
+          <div class="action-icon-circle" style="background: rgba(212, 175, 55, 0.2); color: var(--gold-primary);">M</div>
+          <div><div style="font-weight: 600; color: #fff;">Mishary Rashid Alafasy</div><div style="font-size: 11px; color: var(--text-dim);">Hafs 'an 'Asim (Merdu)</div></div>
+        </div>
+        <div class="modal-action-row" onclick="QuranApp.currentQari = QuranApp.qaris[1]; QuranApp.showToast('Qari diubah ke Saad Al-Ghamdi'); QuranApp.closeAllModals();">
+          <div class="action-icon-circle" style="background: rgba(212, 175, 55, 0.2); color: var(--gold-primary);">S</div>
+          <div><div style="font-weight: 600; color: #fff;">Saad Al-Ghamdi</div><div style="font-size: 11px; color: var(--text-dim);">Hafs 'an 'Asim</div></div>
+        </div>
+        <div class="modal-action-row" onclick="QuranApp.currentQari = QuranApp.qaris[2]; QuranApp.showToast('Qari diubah ke Abdul Basit'); QuranApp.closeAllModals();">
+          <div class="action-icon-circle" style="background: rgba(212, 175, 55, 0.2); color: var(--gold-primary);">A</div>
+          <div><div style="font-weight: 600; color: #fff;">Abdul Basit Murattal</div><div style="font-size: 11px; color: var(--text-dim);">Klasik & Tartil Tajwid</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal" onclick="QuranApp.closeAllModals()">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title"><i class="ri-equalizer-line"></i> Pengaturan Tampilan</div>
+        
+        <div class="slider-group">
+          <div class="slider-group-header">
+            <span>Ukuran Font Arab</span>
+            <span id="arabicSizeLabel">24 px</span>
+          </div>
+          <input type="range" min="18" max="38" value="24" oninput="QuranApp.arabicFontSize = this.value; document.getElementById('arabicSizeLabel').innerText = this.value + ' px';">
+        </div>
+
+        <div class="slider-group">
+          <div class="slider-group-header">
+            <span>Ukuran Font Terjemahan</span>
+            <span id="transSizeLabel">14 px</span>
+          </div>
+          <input type="range" min="12" max="20" value="14" oninput="QuranApp.translationFontSize = this.value; document.getElementById('transSizeLabel').innerText = this.value + ' px';">
+        </div>
+      </div>
+    </div>
+
+    <!-- Jump Page / Juz Modal -->
+    <div class="modal-overlay" id="jumpPageModal" onclick="QuranApp.closeAllModals()">
+      <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title"><i class="ri-compass-3-line"></i> Buka Lembaran Kitab</div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Pilih halaman (1-604), Juz (1-30), atau Surah untuk membuka mushaf:</p>
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+          <input type="number" id="jumpPageInput" min="1" max="604" placeholder="Nomor Halaman (1-604)" style="flex: 1; padding: 10px 14px; background: var(--surface-dark); border: 1px solid var(--gold-primary); border-radius: 10px; color: #fff; font-size: 14px;">
+          <button class="btn-resume" onclick="QuranApp.submitJumpPage()" style="padding: 10px 18px; margin: 0;">Buka</button>
+        </div>
+
+        <div style="font-size: 12px; font-weight: 700; color: var(--gold-light); margin-bottom: 8px;">Lompat Cepat Berdasarkan Juz:</div>
+        <div id="juzQuickLinks" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; max-height: 180px; overflow-y: auto; padding-right: 4px;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" style="position: absolute; bottom: 80px; left: 20px; right: 20px; background: var(--card-elevated); color: var(--gold-light); padding: 10px 16px; border-radius: 12px; border: 1px solid var(--gold-primary); text-align: center; font-size: 13px; font-weight: 600; opacity: 0; transform: translateY(20px); transition: all 0.3s; pointer-events: none; z-index: 150;">
+      Notifikasi
+    </div>
+
+    <!-- iOS Home Indicator -->
+    <div class="home-indicator"></div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
